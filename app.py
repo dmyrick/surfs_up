@@ -22,18 +22,47 @@ session = Session(engine)
 
 app = Flask(__name__)
 
-@app.route("/")
-def welcome():
-    return(
-    '''
-    Welcome to the Climate Analysis API!
-    Available Routes:
-    /api/v1.0/precipitation
-    /api/v1.0/stations
-    /api/v1.0/tobs
-    /api/v1.0/temp/start/end
-    ''')
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+@app.route("/")
+def home():
+    homepageHTML = (
+        f"<h1>Welcome to the Hawaii Climate Analysis API!</h1>"
+        f"<h2>Available API Endpoints:</h2><br/>"
+
+        f"<h3>🌧 PRECIPITATION:</h3>"
+        f"<a href='/api/v1.0/precipitation'>/api/v1.0/precipitation</a><br/><br/><br/><br/>"
+
+        f"<h3>📡 STATIONS:</h3>"
+        f"<a href='/api/v1.0/stations'>/api/v1.0/stations</a><br/><br/><br/><br/>"
+
+        f"<h3>🌡 TEMPERATURE OBSERVATIONS:</h3>"
+        f"<a href='/api/v1.0/tobs'>/api/v1.0/tobs</a><br/><br/><br/><br/>"
+
+        f"<h3>📆 SPECIFIED START DATE:</h3>"
+        f"/api/v1.0/temp/YYYY-MM-DD<br/><br/><br/><br/>"
+
+        f"<h3>📆 SPECIFIED START DATE & END DATE:</h3>"
+        f"/api/v1.0/temp/YYYY-MM-DD/YYYY-MM-DD"
+    )
+    return homepageHTML
+# def welcome():
+#     return(
+#     '''
+#     Welcome to the Climate Analysis API!
+#     Available Routes:
+#     /api/v1.0/precipitation
+#     /api/v1.0/stations
+#     /api/v1.0/tobs
+#     /api/v1.0/temp/start/end
+#     ''')
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @app.route("/api/v1.0/precipitation")
 def precipitation():
    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
@@ -42,12 +71,20 @@ def precipitation():
    precip = {date: prcp for date, prcp in precipitation}
    return jsonify(precip)
 
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @app.route("/api/v1.0/stations")
 def stations():
     results = session.query(Station.station).all()
     stations = list(np.ravel(results))
     return jsonify(stations=stations)
 
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @app.route("/api/v1.0/tobs")
 def temp_monthly():
     prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
@@ -57,6 +94,10 @@ def temp_monthly():
     temps = list(np.ravel(results))
     return jsonify(temps=temps)
 
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @app.route("/api/v1.0/temp/<start>")
 @app.route("/api/v1.0/temp/<start>/<end>")
 def stats(start=None, end=None):
@@ -73,3 +114,11 @@ def stats(start=None, end=None):
         filter(Measurement.date <= end).all()
     temps = list(np.ravel(results))
     return jsonify(temps)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+if __name__ == '__main__':
+    app.run(debug=True)
+
