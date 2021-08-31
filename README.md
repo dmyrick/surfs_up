@@ -12,7 +12,7 @@ From the analysis, the following could be concluded, which is represented in the
 # June
 
 
-![ScreenShot](https://github.com/dmyrick/surfs_up/blob/main/Resources/june_df.png)
+![ScreenShot](https://github.com/dmyrick/surfs_up/blob/main/Resources/june_updated.png)
 
 
 ![ScreenShot](https://github.com/dmyrick/surfs_up/blob/main/Resources/june_plt.png)
